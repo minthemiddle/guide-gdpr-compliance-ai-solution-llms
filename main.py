@@ -50,7 +50,12 @@ def anonymize_text(text: str) -> tuple[str, Dict[str, str]]:
     # Create mapping of anonymized to original values
     pii_map = {}
     for i, result in enumerate(results):
-        placeholder = f"<{result.entity_type}_{i}>"
+        if result.entity_type == "LOCATION":
+            placeholder = f"<LOCATION_{i}>"
+        elif result.entity_type == "ADDRESS":
+            placeholder = f"<ADDRESS_{i}>"
+        else:
+            placeholder = f"<{result.entity_type}_{i}>"
         original = text[result.start:result.end]
         pii_map[placeholder] = original
     
