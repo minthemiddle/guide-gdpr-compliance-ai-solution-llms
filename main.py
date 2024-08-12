@@ -15,7 +15,11 @@ registry = RecognizerRegistry()
 registry.load_predefined_recognizers()
 
 # Add custom recognizer for company names
-company_recognizer = PatternRecognizer(supported_entity="COMPANY", name="company_recognizer", regex="[A-Z][a-z]+ (Corporation|Corp\.|Inc\.|LLC)")
+company_recognizer = PatternRecognizer(
+    supported_entity="COMPANY",
+    name="company_recognizer",
+    patterns=[r"[A-Z][a-z]+ (Corporation|Corp\.|Inc\.|LLC)"]
+)
 registry.add_recognizer(company_recognizer)
 
 analyzer = AnalyzerEngine(registry=registry)
