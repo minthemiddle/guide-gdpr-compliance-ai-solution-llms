@@ -18,10 +18,6 @@ registry.load_predefined_recognizers()
 # Define the company regex pattern
 company_regex = r"(?:\b[A-Z][a-zA-Z0-9]*(?:\s+[A-Z][a-zA-Z0-9]*)*\s+(?:Limited|Ltd|Plc|LLP|LP|&\s+Co\.|and\s+Co\.|&\s+Company|and\s+Company|Group|Holdings|Corporation|Inc\.|Incorporated)(?!\w))"
 
-# Function to check if a text matches the company regex
-def is_company_name(text):
-    return bool(re.match(company_regex, text))
-
 # Add custom recognizer for company names
 company_recognizer = PatternRecognizer(
     supported_entity="COMPANY",
