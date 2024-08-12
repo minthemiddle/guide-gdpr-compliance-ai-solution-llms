@@ -1,4 +1,4 @@
-# Using Presidio for Privacy-Conscious LLM Integration: A Guide for European Tech Leaders
+# Using Presidio for Privacy-Conscious LLM Integration: A Guide for Product and Tech Leaders
 
 As a European product or tech leader, you may be seeking ways to balance the potential of AI with stringent privacy regulations. This guide presents an approach to handle sensitive data while utilizing advanced AI capabilities.
 
