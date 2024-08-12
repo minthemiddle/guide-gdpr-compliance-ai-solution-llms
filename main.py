@@ -70,6 +70,7 @@ def anonymize_text(text: str) -> tuple[str, Dict[str, str]]:
 
 # Anonymize the legal case
 anonymized_case, pii_map = anonymize_text(legal_case)
+print(f"Anonymous LLM content: {anonymized_case}")
 
 # Initialize OpenAI client
 client = OpenAI()
