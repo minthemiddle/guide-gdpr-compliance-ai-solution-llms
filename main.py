@@ -16,7 +16,7 @@ registry = RecognizerRegistry()
 registry.load_predefined_recognizers()
 
 # Define the company regex pattern
-company_regex = r"\b(?:[A-Z][a-z]+\s)?[A-Z][a-z]+\s(?:Limited|Ltd|Plc|LLP|LP|Corporation|Inc\.|Incorporated)\b"
+company_regex = r"\b[A-Z][a-z]+\s(?:Limited|Ltd|Plc|LLP|LP|Corporation|Inc\.|Incorporated)\b"
 
 # Add custom recognizer for company names
 company_recognizer = PatternRecognizer(
