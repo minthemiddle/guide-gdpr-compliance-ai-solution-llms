@@ -121,7 +121,7 @@ Adopting this approach can demonstrate your company's commitment to responsible 
 
 ## Deep Dive: Understanding the Implementation
 
-Let's take a closer look at the implementation in `main.py`, breaking down each step and explaining its purpose and technical details.
+Let's take a closer look at the implementation in `main.py` (Link to the full code), breaking down each step and explaining its purpose and technical details.
 
 ### 1. Setting Up the Environment
 
