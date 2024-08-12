@@ -5,6 +5,7 @@ from presidio_anonymizer.entities import RecognizerResult, OperatorConfig
 from typing import Dict, List
 from openai import OpenAI
 import json
+from pydantic import BaseModel
 
 # Load spaCy model
 nlp = spacy.load("en_core_web_md")
