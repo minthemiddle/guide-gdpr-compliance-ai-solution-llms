@@ -1,0 +1,4 @@
+presidio-analyzer[nlp_engine]
+presidio-anonymizer
+openai
+spacy
