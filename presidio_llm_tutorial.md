@@ -119,13 +119,147 @@ For privacy-conscious European tech leaders, the combination of Presidio and LLM
 
 Adopting this approach can demonstrate your company's commitment to responsible AI use, balancing technological advancement with ethical data handling – an important consideration in the privacy-focused European market.
 
-## Next Steps
+## Deep Dive: Understanding the Implementation
 
-Ready to implement this privacy-preserving AI solution in your organization? Here's what you can do:
+Let's take a closer look at the implementation in `main.py`, breaking down each step and explaining its purpose and technical details.
 
-1. Explore the Presidio documentation and start experimenting with its PII detection capabilities.
-2. Set up a proof of concept using a small dataset and a chosen LLM provider.
-3. Evaluate the results and fine-tune the system for your specific use case.
-4. Gradually scale the solution across your organization, ensuring compliance at every step.
+### 1. Setting Up the Environment
 
-Remember, responsible AI use extends beyond compliance – it's also about fostering trust with your customers and stakeholders. Consider exploring privacy-preserving AI integration for your organization.
+```python
+import spacy
+import re
+from presidio_analyzer import AnalyzerEngine, RecognizerRegistry, PatternRecognizer, Pattern
+from presidio_anonymizer import AnonymizerEngine
+from presidio_anonymizer.entities import RecognizerResult, OperatorConfig
+from typing import Dict, List
+from openai import OpenAI
+import json
+from pydantic import BaseModel
+
+nlp = spacy.load("en_core_web_md")
+```
+
+This section imports necessary libraries and loads the spaCy model. spaCy is used for advanced NLP tasks, while Presidio provides the core PII detection and anonymization functionality. The OpenAI library is used to interact with the LLM.
+
+### 2. Initializing Presidio Components
+
+```python
+registry = RecognizerRegistry()
+registry.load_predefined_recognizers()
+
+company_regex = r"\b[A-Z][a-z]+\s(?:Limited|Ltd|Plc|LLP|LP|Corporation|Inc\.|Incorporated)\b"
+
+company_recognizer = PatternRecognizer(
+    supported_entity="COMPANY",
+    name="company_recognizer",
+    patterns=[
+        Pattern(
+            name="company",
+            regex=company_regex,
+            score=0.7
+        )
+    ]
+)
+registry.add_recognizer(company_recognizer)
+
+analyzer = AnalyzerEngine(registry=registry)
+anonymizer = AnonymizerEngine()
+```
+
+Here, we set up the Presidio components. We create a custom recognizer for company names using a regex pattern and add it to the registry. This allows Presidio to identify and anonymize company names in addition to its predefined PII types.
+
+### 3. Anonymization Function
+
+```python
+def anonymize_text(text: str) -> tuple[str, Dict[str, str]]:
+    results = analyzer.analyze(text=text, language="en")
+    
+    pii_map = {}
+    for i, result in enumerate(results):
+        placeholder = f"<{result.entity_type}_{i}>"
+        original = text[result.start:result.end]
+        pii_map[placeholder] = original
+    
+    doc = nlp(text)
+    for ent in doc.ents:
+        if ent.label_ in ["ORG", "PRODUCT"] and ent.text not in [v for v in pii_map.values()]:
+            placeholder = f"<COMPANY_{len(pii_map)}>"
+            pii_map[placeholder] = ent.text
+    
+    anonymized_text = text
+    for placeholder, original in sorted(pii_map.items(), key=lambda x: len(x[1]), reverse=True):
+        anonymized_text = anonymized_text.replace(original, placeholder)
+    
+    return anonymized_text, pii_map
+```
+
+This function is the core of our PII protection strategy. It performs these steps:
+1. Uses Presidio's analyzer to identify PII in the text.
+2. Creates a mapping between placeholders and original PII values.
+3. Uses spaCy to identify additional entities (like organizations) that Presidio might have missed.
+4. Replaces the original PII with placeholders in the text.
+
+The function returns both the anonymized text and the PII mapping, which will be used later for de-anonymization.
+
+### 4. LLM Integration
+
+```python
+client = OpenAI()
+
+class LegalSummary(BaseModel):
+    summary: str
+
+completion = client.beta.chat.completions.parse(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "Summarize this legal case in very short bullet points. Keep placeholders intact."},
+        {"role": "user", "content": anonymized_case},
+    ],
+    response_format=LegalSummary,
+)
+
+summary = completion.choices[0].message.parsed.summary
+```
+
+This section demonstrates how to interact with the LLM (in this case, GPT-4o-mini) using the anonymized text. We use the OpenAI client to send a request to the model, asking it to summarize the anonymized legal case. The `LegalSummary` class defines the expected response format.
+
+### 5. De-anonymization Function
+
+```python
+def de_anonymize_text(text: str, pii_map: Dict[str, str]) -> str:
+    for placeholder, original in pii_map.items():
+        text = text.replace(placeholder, original)
+    return text
+```
+
+This function reverses the anonymization process. It takes the anonymized text (in this case, the summary from the LLM) and the PII mapping, and replaces all placeholders with their original values.
+
+### 6. Putting It All Together
+
+```python
+anonymized_case, pii_map = anonymize_text(legal_case)
+final_summary = de_anonymize_text(summary, pii_map)
+
+print("Anonymized case:")
+print(anonymized_case)
+
+print("\nSummary before de-anonymization:")
+print(summary)
+
+print("\nFinal Summary:")
+print(final_summary)
+
+print("\nPII Map:")
+for placeholder, original in pii_map.items():
+    print(f"{placeholder}: {original}")
+```
+
+This final section demonstrates the full workflow:
+1. Anonymize the input text
+2. Send the anonymized text to the LLM
+3. De-anonymize the LLM's response
+4. Print various stages of the process for debugging and verification
+
+By following this process, we ensure that no PII is sent to the external LLM service, while still leveraging its capabilities to process and summarize the information.
+
+Remember, while this implementation provides a strong foundation for privacy-preserving AI integration, it's crucial to thoroughly test and validate the system with your specific use cases and data types. Always consult with legal and compliance teams to ensure adherence to relevant privacy regulations.
