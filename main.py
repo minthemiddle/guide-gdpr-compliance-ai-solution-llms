@@ -18,7 +18,9 @@ registry.load_predefined_recognizers()
 company_recognizer = PatternRecognizer(
     supported_entity="COMPANY",
     name="company_recognizer",
-    regex_pattern=r"[A-Z][a-z]+ (Corporation|Corp\.|Inc\.|LLC)"
+    patterns=[
+        {"name": "company", "regex": r"[A-Z][a-z]+ (Corporation|Corp\.|Inc\.|LLC)"}
+    ]
 )
 registry.add_recognizer(company_recognizer)
 
