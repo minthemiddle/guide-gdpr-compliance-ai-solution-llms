@@ -9,8 +9,6 @@ The code demonstrates how to integrate Presidio with Large Language Models (LLMs
 ## Contents
 
 - `main.py`: The main script demonstrating the anonymization and de-anonymization process.
-- `presidio_llm_tutorial.md`: The original markdown guide for enhancing AI privacy using Presidio and LLMs.
-- `test_legal_cases.py`: Unit tests for verifying the anonymization and de-anonymization processes.
 
 ## Getting Started
 
