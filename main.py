@@ -33,7 +33,12 @@ def anonymize_text(text: str) -> tuple[str, Dict[str, str]]:
     ).text
 
     # Create mapping of anonymized to original values
-    pii_map = {result.entity_type: text[result.start:result.end] for result in results}
+    pii_map = {}
+    for result in results:
+        placeholder = f"[{result.entity_type}]"
+        original = text[result.start:result.end]
+        if placeholder in anonymized_text:
+            pii_map[placeholder] = original
     
     return anonymized_text, pii_map
 
@@ -64,7 +69,7 @@ print(f"Summary: {summary}")
 # Function to de-anonymize text
 def de_anonymize_text(text: str, pii_map: Dict[str, str]) -> str:
     for placeholder, original in pii_map.items():
-        text = text.replace(f"[{placeholder}]", original)
+        text = text.replace(placeholder, original)
     return text
 
 # De-anonymize the summary
@@ -72,3 +77,8 @@ final_summary = de_anonymize_text(summary, pii_map)
 
 # Print the final summary with PII
 print(f"Final Summary: {final_summary}")
+
+# Print the PII map for debugging
+print("PII Map:")
+for placeholder, original in pii_map.items():
+    print(f"{placeholder}: {original}")
