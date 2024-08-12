@@ -1,19 +1,19 @@
-# Using Presidio for Privacy-Conscious LLM Integration: A Guide for Product and Tech Leaders
+# Using Presidio for Privacy-Conscious LLM Integration: A Case Study for Product and Tech Leaders
 
-As a European product or tech leader, you may be seeking ways to balance the potential of AI with stringent privacy regulations. This guide presents an approach to handle sensitive data while utilizing advanced AI capabilities.
+As a European product or tech leader, you may be seeking ways to balance the potential of AI with stringent privacy regulations. This case study presents an approach to handle sensitive data while utilizing advanced AI capabilities.
 
 ## What You'll Learn
 
-By the end of this post, you'll understand:
+By the end of this case study, you'll understand:
 1. How to use Presidio to anonymize sensitive data
 2. How to safely interact with powerful LLMs like GPT-4
 3. How to de-anonymize results within your secure environment
 
 This approach enables the use of advanced AI while maintaining control over sensitive data, in line with GDPR requirements.
 
-## Who This Guide Is For
+## Who This Case Study Is For
 
-This guide is tailored for privacy-conscious tech leaders in Europe who want to:
+This case study is tailored for privacy-conscious tech leaders in Europe who want to:
 - Implement advanced AI solutions
 - Ensure compliance with GDPR and other privacy regulations
 - Protect sensitive data while leveraging external AI services
@@ -30,7 +30,7 @@ However, using these models typically involves sending data to external servers,
 
 ## The Solution: Presidio + LLMs
 
-This guide proposes integrating Presidio, an open-source data protection and anonymization toolkit, with LLMs to create a system that:
+This case study proposes integrating Presidio, an open-source data protection and anonymization toolkit, with LLMs to create a system that:
 
 1. Identifies and anonymizes PII in your data
 2. Enables safer interaction with LLMs
@@ -47,11 +47,9 @@ Our solution operates in three key steps:
 1. **PII Detection and Anonymization**
    - Presidio employs advanced NLP techniques (via `spacy`) to identify various types of PII in text data.
    - It then replaces this information with placeholders, ensuring sensitive data never leaves your secure environment.
-
 2. **Safe LLM Interaction**
    - The anonymized text is sent to the latest frontier LLM (e.g., *GPT-4o-mini*) for processing.
    - With no real PII present, the risk of data exposure is minimized.
-
 3. **Result De-anonymization**
    - The LLM's output, still containing placeholders, is de-anonymized by replacing the placeholders with the original PII.
    - This process occurs only within your secure environment, maintaining data privacy.
