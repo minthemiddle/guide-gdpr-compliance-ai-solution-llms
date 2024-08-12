@@ -223,6 +223,23 @@ summary = completion.choices[0].message.parsed.summary
 
 This section demonstrates how to interact with the LLM (in this case, GPT-4o-mini) using the anonymized text. We use the OpenAI client to send a request to the model, asking it to summarize the anonymized legal case. The `LegalSummary` class defines the expected response format.
 
+For more complex legal cases with consistent output criteria, you could define a more detailed schema. This approach allows for structured and consistent summaries across different cases. For example:
+
+```python
+class LegalCaseSummary(BaseModel):
+    case_type: str
+    plaintiff: str
+    defendant: str
+    filing_date: str
+    key_allegations: List[str]
+    relief_sought: str
+    jurisdiction: str
+    potential_precedents: List[str]
+    estimated_case_duration: str
+```
+
+By using a more detailed schema like this, you ensure that the LLM provides specific information for each field, making it easier to process and analyze large numbers of legal cases consistently. This structured approach can be particularly useful for legal analytics, case management systems, or automated legal research tools.
+
 ### 5. De-anonymization Function
 
 ```python
