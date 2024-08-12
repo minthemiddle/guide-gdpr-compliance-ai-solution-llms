@@ -166,7 +166,21 @@ anonymizer = AnonymizerEngine()
 
 Here, we set up the Presidio components. We create a custom recognizer for company names using a regex pattern and add it to the registry. This allows Presidio to identify and anonymize company names in addition to its predefined PII types.
 
-### 3. Anonymization Function
+### 3. Loading a Sample Legal Case
+
+Before we can anonymize the text, we need to load a sample legal case. In a real-world scenario, this might come from a database or user input. For our example, we'll use a hardcoded string:
+
+```python
+legal_case = """
+On 15th March 2023, John Smith, born on 10/05/1985, filed a complaint against XYZ Corporation. 
+The plaintiff, residing at 123 Main St, London, can be reached at +44 20 1234 5678 or john.smith@email.com. 
+His UK ID number is AB123456C. The case alleges breach of contract...
+"""
+```
+
+This sample case contains various types of PII, including names, dates of birth, addresses, phone numbers, email addresses, and ID numbers. It will serve as our input for the anonymization process.
+
+### 4. Anonymization Function
 
 ```python
 def anonymize_text(text: str) -> tuple[str, Dict[str, str]]:
