@@ -51,7 +51,7 @@ class LegalSummary(BaseModel):
 completion = client.beta.chat.completions.parse(
     model="gpt-4o-mini",
     messages=[
-        {"role": "system", "content": "Summarize this legal case. Keep placeholders intact."},
+        {"role": "system", "content": "Summarize this legal case in very short bullet points. Keep placeholders intact."},
         {"role": "user", "content": anonymized_case},
     ],
     response_format=LegalSummary,
@@ -59,6 +59,7 @@ completion = client.beta.chat.completions.parse(
 
 # Extract summary from response
 summary = completion.choices[0].message.parsed.summary
+print(f"Summary: {summary}")
 
 # Function to de-anonymize text
 def de_anonymize_text(text: str, pii_map: Dict[str, str]) -> str:
@@ -70,5 +71,4 @@ def de_anonymize_text(text: str, pii_map: Dict[str, str]) -> str:
 final_summary = de_anonymize_text(summary, pii_map)
 
 # Print the final summary with PII
-print("Final Summary:")
-print(final_summary)
+print(f"Final Summary: {final_summary}")
