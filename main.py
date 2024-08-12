@@ -1,4 +1,5 @@
 import spacy
+import re
 from presidio_analyzer import AnalyzerEngine, RecognizerRegistry, PatternRecognizer, Pattern
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import RecognizerResult, OperatorConfig
@@ -14,6 +15,13 @@ nlp = spacy.load("en_core_web_md")
 registry = RecognizerRegistry()
 registry.load_predefined_recognizers()
 
+# Define the company regex pattern
+company_regex = r"(?:\b[A-Z][a-zA-Z0-9]*(?:\s+[A-Z][a-zA-Z0-9]*)*\s+(?:Limited|Ltd|Plc|LLP|LP|&\s+Co\.|and\s+Co\.|&\s+Company|and\s+Company|Group|Holdings|Corporation|Inc\.|Incorporated)(?!\w))"
+
+# Function to check if a text matches the company regex
+def is_company_name(text):
+    return bool(re.match(company_regex, text))
+
 # Add custom recognizer for company names
 company_recognizer = PatternRecognizer(
     supported_entity="COMPANY",
@@ -21,7 +29,7 @@ company_recognizer = PatternRecognizer(
     patterns=[
         Pattern(
             name="company",
-            regex=r"[A-Z][a-z]+ (Corporation|Corp\.|Inc\.|LLC)",
+            regex=company_regex,
             score=0.7
         )
     ]
