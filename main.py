@@ -1,5 +1,5 @@
 import spacy
-from presidio_analyzer import AnalyzerEngine
+from presidio_analyzer import AnalyzerEngine, RecognizerRegistry, PatternRecognizer
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import RecognizerResult, OperatorConfig
 from typing import Dict, List
@@ -11,7 +11,14 @@ from pydantic import BaseModel
 nlp = spacy.load("en_core_web_md")
 
 # Initialize Presidio engines
-analyzer = AnalyzerEngine()
+registry = RecognizerRegistry()
+registry.load_predefined_recognizers()
+
+# Add custom recognizer for company names
+company_recognizer = PatternRecognizer(supported_entity="COMPANY", name="company_recognizer", regex="[A-Z][a-z]+ (Corporation|Corp\.|Inc\.|LLC)")
+registry.add_recognizer(company_recognizer)
+
+analyzer = AnalyzerEngine(registry=registry)
 anonymizer = AnonymizerEngine()
 
 # Sample legal case with PII
@@ -32,6 +39,13 @@ def anonymize_text(text: str) -> tuple[str, Dict[str, str]]:
         placeholder = f"<{result.entity_type}_{i}>"
         original = text[result.start:result.end]
         pii_map[placeholder] = original
+    
+    # Use spaCy to identify additional entities
+    doc = nlp(text)
+    for ent in doc.ents:
+        if ent.label_ in ["ORG", "PRODUCT"] and ent.text not in [v for v in pii_map.values()]:
+            placeholder = f"<COMPANY_{len(pii_map)}>"
+            pii_map[placeholder] = ent.text
     
     # Anonymize text
     anonymized_text = text
