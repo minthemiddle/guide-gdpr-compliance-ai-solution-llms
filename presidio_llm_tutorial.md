@@ -1,6 +1,6 @@
 # Using Presidio for Privacy-Conscious LLM Integration: A Guide for European Tech Leaders
 
-As a European tech leader, you may be seeking ways to balance the potential of AI with stringent privacy regulations. This guide presents an approach to handle sensitive data while utilizing advanced AI capabilities.
+As a European product or tech leader, you may be seeking ways to balance the potential of AI with stringent privacy regulations. This guide presents an approach to handle sensitive data while utilizing advanced AI capabilities.
 
 ## What You'll Learn
 
@@ -21,6 +21,7 @@ This guide is tailored for privacy-conscious tech leaders in Europe who want to:
 ## The Challenge: AI Power vs. Data Privacy
 
 As a tech leader, you're likely aware of the potential applications of Large Language Models (LLMs) in areas such as:
+
 - Summarizing legal documents
 - Analyzing customer feedback
 - Improving various business processes
@@ -48,7 +49,7 @@ Our solution operates in three key steps:
    - It then replaces this information with placeholders, ensuring sensitive data never leaves your secure environment.
 
 2. **Safe LLM Interaction**
-   - The anonymized text is sent to the LLM (e.g., GPT-4) for processing.
+   - The anonymized text is sent to the latest frontier LLM (e.g., *GPT-4o-mini*) for processing.
    - With no real PII present, the risk of data exposure is minimized.
 
 3. **Result De-anonymization**
@@ -60,7 +61,7 @@ Our solution operates in three key steps:
 - **Presidio Analyzer**: Detects PII entities in text using predefined or custom recognizers.
 - **Presidio Anonymizer**: Anonymizes detected PII entities.
 - **Custom Recognizers**: Can be added for domain-specific PII types.
-- **LLM Integration**: Seamless interaction with models like GPT-4 using anonymized data.
+- **LLM Integration**: Seamless interaction with models like GPT-4o-min using anonymized data.
 
 ### Implementation Highlights
 
