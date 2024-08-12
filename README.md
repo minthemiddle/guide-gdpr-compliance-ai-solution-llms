@@ -14,7 +14,10 @@ The code demonstrates how to integrate Presidio with Large Language Models (LLMs
 
 ## Getting Started
 
-To get started with this code base, clone the repository and follow the instructions in the blog post for setting up your environment and running the examples.
+1. Clone the repo: `git clone <repo-url> && cd <repo-dir>`
+2. Set up a virtual environment: `python3 -m venv venv && source venv/bin/activate`
+3. Install dependencies: `pip install -r requirements.txt`
+4. Run the main script: `python main.py`
 
 ## License
 
