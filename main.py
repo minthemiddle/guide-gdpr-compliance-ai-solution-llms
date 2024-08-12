@@ -1,5 +1,5 @@
 import spacy
-from presidio_analyzer import AnalyzerEngine, RecognizerRegistry, PatternRecognizer
+from presidio_analyzer import AnalyzerEngine, RecognizerRegistry, PatternRecognizer, Pattern
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import RecognizerResult, OperatorConfig
 from typing import Dict, List
@@ -19,7 +19,11 @@ company_recognizer = PatternRecognizer(
     supported_entity="COMPANY",
     name="company_recognizer",
     patterns=[
-        {"name": "company", "regex": r"[A-Z][a-z]+ (Corporation|Corp\.|Inc\.|LLC)", "score": 0.7}
+        Pattern(
+            name="company",
+            regex=r"[A-Z][a-z]+ (Corporation|Corp\.|Inc\.|LLC)",
+            score=0.7
+        )
     ]
 )
 registry.add_recognizer(company_recognizer)
