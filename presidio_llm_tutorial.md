@@ -289,6 +289,53 @@ This final section demonstrates the full workflow:
 3. De-anonymize the LLM's response
 4. Print various stages of the process for debugging and verification
 
+Here's the output from running our example:
+
+```yaml 
+# Output from running python3 main.py
+# Line breaks changed slightly to make it more readable
+
+Anonymous LLM content:
+On <DATE_TIME_1>, <PERSON_2>, born on <DATE_TIME_3>, filed a complaint against <COMPANY_7>.
+The plaintiff, residing at 123 <LOCATION_4>, <LOCATION_5>, can be reached at <PHONE_NUMBER_10> or <EMAIL_ADDRESS_0>.
+His <LOCATION_6> ID number is <US_DRIVER_LICENSE_11>. The case alleges breach of contract...
+
+Anonymized case:
+On <DATE_TIME_1>, <PERSON_2>, born on <DATE_TIME_3>, filed a complaint against <COMPANY_7>.
+The plaintiff, residing at 123 <LOCATION_4>, <LOCATION_5>, can be reached at <PHONE_NUMBER_10> or <EMAIL_ADDRESS_0>.
+His <LOCATION_6> ID number is <US_DRIVER_LICENSE_11>. The case alleges breach of contract...
+
+Summary before de-anonymization:
+- On <DATE_TIME_1>, <PERSON_2> filed a complaint against <COMPANY_7>.
+- Plaintiff's birth date: <DATE_TIME_3>.
+- Residing at: 123 <LOCATION_4>, <LOCATION_5>.
+- Contact info: <PHONE_NUMBER_10>, <EMAIL_ADDRESS_0>.
+- Location ID: <US_DRIVER_LICENSE_11>.
+- Allegation: breach of contract.
+
+Final Summary:
+- On 15th March 2023, John Smith filed a complaint against XYZ Corporation.
+- Plaintiff's birth date: 10/05/1985.
+- Residing at: 123 Main St, London.
+- Contact info: +44 20 1234 5678, john.smith@email.com.
+- Location ID: AB123456C.
+- Allegation: breach of contract.
+
+PII Map:
+<EMAIL_ADDRESS_0>: john.smith@email.com
+<DATE_TIME_1>: 15th March 2023
+<PERSON_2>: John Smith
+<DATE_TIME_3>: 10/05/1985
+<LOCATION_4>: Main St
+<LOCATION_5>: London
+<LOCATION_6>: UK
+<COMPANY_7>: XYZ Corporation
+<URL_8>: john.sm
+<URL_9>: email.com
+<PHONE_NUMBER_10>: +44 20 1234 5678
+<US_DRIVER_LICENSE_11>: AB123456C
+```
+
 By following this process, we ensure that no PII is sent to the external LLM service, while still leveraging its capabilities to process and summarize the information.
 
 Remember, while this implementation provides a strong foundation for privacy-preserving AI integration, it's crucial to thoroughly test and validate the system with your specific use cases and data types. Always consult with legal and compliance teams to ensure adherence to relevant privacy regulations.
