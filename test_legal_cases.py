@@ -1,14 +1,10 @@
 import unittest
-from main import anonymize_text, de_anonymize_text
-from openai import OpenAI
+from main import anonymize_text, de_anonymize_text, client
 
 class TestLegalCases(unittest.TestCase):
-    def setUp(self):
-        self.client = OpenAI()
-
     def process_case(self, case):
         anonymized_case, pii_map = anonymize_text(case)
-        completion = self.client.beta.chat.completions.parse(
+        completion = client.beta.chat.completions.parse(
             model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "Summarize this legal case in very short bullet points. Keep placeholders intact."},
