@@ -26,19 +26,17 @@ def anonymize_text(text: str) -> tuple[str, Dict[str, str]]:
     # Analyze text
     results = analyzer.analyze(text=text, language="en")
     
-    # Anonymize text
-    anonymized_text = anonymizer.anonymize(
-        text=text,
-        analyzer_results=results
-    ).text
-
     # Create mapping of anonymized to original values
     pii_map = {}
-    for result in results:
-        placeholder = f"[{result.entity_type}]"
+    for i, result in enumerate(results):
+        placeholder = f"<{result.entity_type}_{i}>"
         original = text[result.start:result.end]
-        if placeholder in anonymized_text:
-            pii_map[placeholder] = original
+        pii_map[placeholder] = original
+    
+    # Anonymize text
+    anonymized_text = text
+    for placeholder, original in sorted(pii_map.items(), key=lambda x: len(x[1]), reverse=True):
+        anonymized_text = anonymized_text.replace(original, placeholder)
     
     return anonymized_text, pii_map
 
@@ -75,10 +73,19 @@ def de_anonymize_text(text: str, pii_map: Dict[str, str]) -> str:
 # De-anonymize the summary
 final_summary = de_anonymize_text(summary, pii_map)
 
+# Print the anonymized case for debugging
+print("Anonymized case:")
+print(anonymized_case)
+
+# Print the summary before de-anonymization for debugging
+print("\nSummary before de-anonymization:")
+print(summary)
+
 # Print the final summary with PII
-print(f"Final Summary: {final_summary}")
+print("\nFinal Summary:")
+print(final_summary)
 
 # Print the PII map for debugging
-print("PII Map:")
+print("\nPII Map:")
 for placeholder, original in pii_map.items():
     print(f"{placeholder}: {original}")
